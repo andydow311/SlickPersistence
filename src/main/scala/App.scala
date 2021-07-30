@@ -19,7 +19,7 @@ import scala.collection.mutable.ListBuffer
 object App extends App {
 
   val lowerLimit = "1"
-  val upperLimit = "11"
+  val upperLimit = "10"
 
   val getHorseData : Seq[(Int, String, String, String, String, String, String, String)] = Range(lowerLimit.toInt,upperLimit.toInt).map(n => {
     val id = "%07d".format(n)
