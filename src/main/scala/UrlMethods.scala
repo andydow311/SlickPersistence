@@ -2,6 +2,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.Locale
 
+import App.{Horse, Race}
 import org.joda.time.format.DateTimeFormat
 import org.jsoup.Jsoup
 
@@ -10,7 +11,7 @@ import scala.util.matching.Regex
 
 object UrlMethods {
 
-  def createHorseFromUrl(url:String, id:Int) : (Int, String, String, String, String, String, String, String) = {
+  def createHorseFromUrl(url:String, id:Int) : Either[java.lang.Throwable, Horse] = {
 
     try {
       val doc = Jsoup.connect(url).get().toString
@@ -51,16 +52,18 @@ object UrlMethods {
 
       }
 
-      (id, name, dob, trainer, sex, sire, dam, owner)
+      Right(Horse(id, name, dob, trainer, sex, sire, dam, owner))
+
+
     } catch {
-      case e: Exception => (0, "", "", "", "", "", "", "")
+      case ex: Exception => Left(ex)
     }
   }
 
 
-  def createRaceData(url: String,id:Int): Seq[(Int,Long,String,String,String,String,String,String,String,String,String, String,String)] ={
+  def createRaceData(url: String,id:Int): Either[java.lang.Throwable, Seq[Race]] ={
 
-    val seq: ListBuffer[(Int,Long,String,String,String,String,String,String,String,String,String, String, String)] = ListBuffer()
+    val seq: ListBuffer[Race] = ListBuffer()
 
     try{
 
@@ -119,8 +122,8 @@ object UrlMethods {
 
         }
 
-        seq.append(
-          (id,
+       seq.append(
+          Race(id,
             horseAgeInMonths,
             sequence(0),
             sequence(1),
@@ -138,9 +141,9 @@ object UrlMethods {
       }
 
     }catch {
-      case e: Exception => e.printStackTrace()
+      case e: Exception => Left(e)
     }
-    seq.toList
+    Right(seq.toList)
   }
 
   def mapSex(sex:String): String ={

@@ -2,6 +2,7 @@ import Tables.{Horses, HorsesDamToId, HorsesOwnerToId, HorsesSireToId, HorsesTra
 import slick.jdbc.MySQLProfile
 import slick.lifted.TableQuery
 import slick.jdbc.MySQLProfile.api._
+import App.{Horse, Race}
 
 object MysqlMethods {
 
@@ -25,9 +26,9 @@ object MysqlMethods {
 
 
   def insertHorseDetails(
-                          horse:(Int, String, String, String, String, String, String, String)
+                          horse:Horse
                         ) = db.run(
-    horses += (horse._1, horse._2, horse._3, horse._4, horse._5, horse._6, horse._7,horse._8)
+    horses += (horse.id, horse.name, horse.dob, horse.trainer, horse.sex, horse.sireName, horse.damName, horse.trainer)
   )
 
 
@@ -47,10 +48,12 @@ object MysqlMethods {
                        horse:(String)
                      ) = db.run(horsesDam += (None, horse))
 
+
   def insertRaceDetails(
-                         race:(Int,Long,String,String,String,String,String,String,String,String,String,String, String)
+                         race:Race
                        ) = db.run(
-    races += (None,race._1, race._2, race._3, race._4, race._5, race._6, race._7, race._8, race._9, race._10, race._11, race._12,race._13)
+    races += (None,race.horseId, race.horseAge, race.raceDate, race.position, race.numberRan, race.bha, race.courseType,
+      race.course, race.distance, race.going, race.raceClass, race.startingPrice,race.posMap)
   )
 
 
